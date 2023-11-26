@@ -1,11 +1,6 @@
 import type {
   IntrospectionQuery,
 } from 'graphql/utilities'
-import {
-  buildClientSchema,
-  getIntrospectionQuery,
-  printSchema,
-} from 'graphql/utilities'
 
 export interface SchemaOptions {
   url?: string
@@ -16,6 +11,7 @@ export interface SchemaOptions {
 export async function getSchema(opts: SchemaOptions) {
   if (!opts.url)
     return
+  const {getIntrospectionQuery} = await import('graphql/utilities/getIntrospectionQuery')
   const introspectionQuery = getIntrospectionQuery()
   const headers: Record<string, string> = {}
 
@@ -28,6 +24,8 @@ export async function getSchema(opts: SchemaOptions) {
     body: JSON.stringify({ query: introspectionQuery }),
   })
 
+  const {buildClientSchema} = await import('graphql/utilities/buildClientSchema')
   const schema = buildClientSchema(data)
+  const {printSchema} = await import('graphql/utilities/printSchema')
   return printSchema(schema)
 }
