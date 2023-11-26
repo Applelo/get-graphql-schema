@@ -46,7 +46,7 @@ const headerValuePlaceholder = computed(
 <template>
   <main class="bg-gray-900">
     <div class="max-w-5xl mx-auto min-h-screen px-4 py-8 flex flex-col">
-      <Header v-once />
+      <Header />
 
       <UForm
         class="max-w-lg w-full mx-auto"
@@ -99,7 +99,7 @@ const headerValuePlaceholder = computed(
       :loading="loading"
       :raw-schema="rawSchema" />
 
-      <Footer v-once />
+      <Footer />
     </div>
   </main>
   <UNotifications />

@@ -1,15 +1,20 @@
 <script lang="ts" setup>
-import { getHighlighterCore } from 'shikiji'
-import { getWasmInlined } from 'shikiji/wasm'
+import type { HighlighterCore } from 'shikiji/core';
 
 const props = defineProps<{
   rawSchema: string
   loading: boolean
 }>()
 
-// const rawSchema = useRawSchema()
+const toast = useToast()
+let shiki: HighlighterCore;
+const { copy, isSupported: copySupport } = useClipboard()
 
-const shiki = await getHighlighterCore({
+const getShiki = async () => {
+  const shikiji = await import('shikiji/core')
+  const shikijiWasm = await import('shikiji/wasm')
+
+  shiki = await shikiji.getHighlighterCore({
   themes: [
     import('shikiji/themes/dracula.mjs')
   ],
@@ -17,11 +22,9 @@ const shiki = await getHighlighterCore({
     import('shikiji/langs/typescript.mjs'),
     import('shikiji/langs/graphql.mjs'),
   ],
-  loadWasm: getWasmInlined
+  loadWasm: shikijiWasm.getWasmInlined
 })
-
-const toast = useToast()
-const { copy, isSupported: copySupport } = useClipboard()
+}
 
 function schemaToClipboard() {
   copy(props.rawSchema)
@@ -37,6 +40,10 @@ const htmlSchema = computed(
     }
   )
 )
+
+onMounted(() => {
+  getShiki()
+})
 </script>
 
 <template>
