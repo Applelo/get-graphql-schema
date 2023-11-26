@@ -41,9 +41,18 @@ async function onSubmit() {
 const headerValuePlaceholder = computed(
   () => (Math.random() + 1).toString(36).substring(2),
 )
+
+useHead({
+  htmlAttrs: {
+    lang: 'en',
+  },
+})
 </script>
 
 <template>
+  <Title>Get GraphQL Schema</Title>
+  <Meta name="description" content="Get your GraphQL schema easily" />
+
   <main class="bg-gray-900">
     <div class="max-w-5xl mx-auto min-h-screen px-4 py-8 flex flex-col">
       <Header />
@@ -95,11 +104,12 @@ const headerValuePlaceholder = computed(
       </UForm>
 
       <LazyResult
-      v-if="rawSchema || loading"
-      :loading="loading"
-      :raw-schema="rawSchema" />
+        v-if="rawSchema || loading"
+        :loading="loading"
+        :raw-schema="rawSchema"
+      />
 
-      <Footer />
+      <Footer v-once />
     </div>
   </main>
   <UNotifications />

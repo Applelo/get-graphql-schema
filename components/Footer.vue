@@ -2,6 +2,9 @@
   <footer class="mt-auto">
     <UDivider class="mb-2">
       <ULink to="https://github.com/Applelo/get-graphql-schema">
+        <span class="sr-only">
+          See the project on GitHub
+        </span>
         <UIcon name="i-simple-icons-github" class="text-white text-2xl" />
       </ULink>
     </UDivider>
@@ -27,7 +30,7 @@
                   to="https://github.com/prisma-labs/get-graphql-schema"
                 >
                   get-graphql-schema
-                </ULink> by PrismaLab
+                </ULink> from PrismaLab
               </li>
               <li>
                 <ULink to="https://nuxt.com/" class="text-primary">
@@ -38,6 +41,12 @@
                   UI
                 </ULink>
                 by Nuxt Team
+              </li>
+              <li>
+                <ULink to="https://github.com/antfu/shikiji" class="text-primary">
+                  Shikiji
+                </ULink>
+                by antfu
               </li>
             </ul>
           </div>

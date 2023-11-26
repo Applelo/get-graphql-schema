@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { HighlighterCore } from 'shikiji/core';
+import type { HighlighterCore } from 'shikiji/core'
 
 const props = defineProps<{
   rawSchema: string
@@ -7,23 +7,23 @@ const props = defineProps<{
 }>()
 
 const toast = useToast()
-let shiki: HighlighterCore;
+let shiki: HighlighterCore
 const { copy, isSupported: copySupport } = useClipboard()
 
-const getShiki = async () => {
+async function getShiki() {
   const shikiji = await import('shikiji/core')
   const shikijiWasm = await import('shikiji/wasm')
 
   shiki = await shikiji.getHighlighterCore({
-  themes: [
-    import('shikiji/themes/dracula.mjs')
-  ],
-  langs: [
-    import('shikiji/langs/typescript.mjs'),
-    import('shikiji/langs/graphql.mjs'),
-  ],
-  loadWasm: shikijiWasm.getWasmInlined
-})
+    themes: [
+      import('shikiji/themes/dracula.mjs'),
+    ],
+    langs: [
+      import('shikiji/langs/typescript.mjs'),
+      import('shikiji/langs/graphql.mjs'),
+    ],
+    loadWasm: shikijiWasm.getWasmInlined,
+  })
 }
 
 function schemaToClipboard() {
@@ -36,9 +36,9 @@ const htmlSchema = computed(
     props.rawSchema,
     {
       lang: 'graphql',
-      theme: 'dracula'
-    }
-  )
+      theme: 'dracula',
+    },
+  ),
 )
 
 onMounted(() => {
@@ -50,7 +50,6 @@ onMounted(() => {
   <UCard class="mt-12 mb-8">
     <template v-if="rawSchema" #header>
       <div class="flex justify-end">
-
         <UTooltip text="Copy to your clipboard">
           <UButton
             v-if="copySupport"

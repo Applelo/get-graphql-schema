@@ -1,5 +1,9 @@
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui', '@vueuse/nuxt'],
+  modules: [
+    '@nuxt/ui',
+    '@vueuse/nuxt',
+    'nuxt-simple-robots',
+  ],
   nitro: {
     preset: 'vercel-edge',
   },
@@ -9,7 +13,10 @@ export default defineNuxtConfig({
   colorMode: {
     preference: 'dark',
   },
+  robots: {
+    indexable: false,
+  },
   experimental: {
-    componentIslands: true
-  }
+    componentIslands: true,
+  },
 })
