@@ -8,13 +8,13 @@ export default defineNuxtConfig({
     preset: 'vercel-edge',
   },
   ui: {
-    icons: ['heroicons', 'simple-icons'],
+    icons: [
+      'heroicons',
+      'simple-icons',
+    ],
   },
   colorMode: {
     preference: 'dark',
-  },
-  robots: {
-    indexable: false,
   },
   experimental: {
     componentIslands: true,
