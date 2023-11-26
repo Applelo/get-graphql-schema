@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { codeToHtml } from 'shikiji'
 import type { FormError } from '#ui/types'
-import type { SchemaOptions } from '~/utils/schema'
 
 const state = reactive<SchemaOptions>({
   url: undefined,
@@ -10,8 +8,7 @@ const state = reactive<SchemaOptions>({
 })
 
 const hasHeader = ref(false)
-const rawSchema = ref<string>('')
-const htmlSchema = ref<string>('')
+const rawSchema = ref('')
 const loading = ref(false)
 
 function validate(state: any): FormError[] {
@@ -32,17 +29,12 @@ function validate(state: any): FormError[] {
 
 async function onSubmit() {
   rawSchema.value = ''
-  htmlSchema.value = ''
   loading.value = true
   const { data } = await useAsyncData(() => getSchema(state))
   if (!data.value)
     return loading.value = false
 
   rawSchema.value = data.value
-  htmlSchema.value = await codeToHtml(
-    rawSchema.value,
-    { lang: 'javascript', theme: 'dracula' },
-  )
   loading.value = false
 }
 
@@ -102,16 +94,13 @@ const headerValuePlaceholder = computed(
         </UButton>
       </UForm>
 
-      <LazyResult :loading="loading" :raw-schema="rawSchema" :html-schema="htmlSchema" />
+      <LazyResult
+      v-if="rawSchema || loading"
+      :loading="loading"
+      :raw-schema="rawSchema" />
 
       <Footer v-once />
     </div>
   </main>
   <UNotifications />
 </template>
-
-<style>
-.shiki {
-  background-color: transparent!important;
-}
-</style>

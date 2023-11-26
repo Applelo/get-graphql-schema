@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui', 'nuxt-security', '@vueuse/nuxt'],
+  modules: ['@nuxt/ui', '@vueuse/nuxt'],
   nitro: {
     preset: 'vercel-edge',
   },
@@ -8,12 +8,5 @@ export default defineNuxtConfig({
   },
   colorMode: {
     preference: 'dark',
-  },
-  security: {
-    headers: {
-      contentSecurityPolicy: {
-        'script-src': false,
-      },
-    },
   },
 })
