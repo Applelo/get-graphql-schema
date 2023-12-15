@@ -1,5 +1,6 @@
 {
   "type": "module",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -11,17 +12,20 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@graphql-codegen/core": "^4.0.0",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
     "@iconify-json/simple-icons": "^1.1.84",
     "@nuxt/ui": "^2.11.1",
     "@vueuse/core": "^10.7.0",
     "@vueuse/nuxt": "^10.7.0",
     "graphql": "^16.8.1",
+    "nuxt": "^3.8.2",
     "nuxt-simple-robots": "^3.1.10",
     "shikiji": "^0.9.3"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.4.6",
-    "eslint": "^8.55.0",
-    "nuxt": "^3.8.2"
+    "eslint": "^8.55.0"
   }
 }
