@@ -3,12 +3,11 @@ import type { FormError } from '#ui/types'
 
 const state = reactive<SchemaOptions>({
   url: undefined,
-  headerName: undefined,
-  headerValue: undefined,
+  headers: [],
 })
 
-const hasHeader = ref(false)
 const rawSchema = ref('')
+const errorSchema = ref<Error | null>(null)
 const loading = ref(false)
 
 function validate(state: any): FormError[] {
@@ -16,13 +15,13 @@ function validate(state: any): FormError[] {
   if (!state.url)
     errors.push({ path: 'url', message: 'Required' })
 
-  if (hasHeader.value) {
-    if (!state.headerName)
-      errors.push({ path: 'headerName', message: 'Required' })
+  // if (hasHeader.value) {
+  // if (!state.headerName)
+  //   errors.push({ path: 'headerName', message: 'Required' })
 
-    if (!state.headerValue)
-      errors.push({ path: 'headerValue', message: 'Required' })
-  }
+  // if (!state.headerValue)
+  //   errors.push({ path: 'headerValue', message: 'Required' })
+  // }
 
   return errors
 }
@@ -30,17 +29,14 @@ function validate(state: any): FormError[] {
 async function onSubmit() {
   rawSchema.value = ''
   loading.value = true
-  const { data } = await useAsyncData(() => getSchema(state))
+  const { data, error } = await useAsyncData(() => getSchema(state))
+  errorSchema.value = error.value
   if (!data.value)
     return loading.value = false
 
   rawSchema.value = data.value
   loading.value = false
 }
-
-const headerValuePlaceholder = computed(
-  () => (Math.random() + 1).toString(36).substring(2),
-)
 
 useHead({
   htmlAttrs: {
@@ -50,8 +46,7 @@ useHead({
 </script>
 
 <template>
-  <Title>Get GraphQL Schema</Title>
-  <Meta name="description" content="Get your GraphQL schema easily" />
+  <AppHead />
 
   <main class="bg-gray-900">
     <div class="max-w-5xl mx-auto min-h-screen px-4 py-8 flex flex-col">
@@ -73,38 +68,55 @@ useHead({
           />
         </UFormGroup>
 
-        <UCheckbox v-model="hasHeader" class="mb-2">
-          <template #label>
-            <span class="text-white">
-              Set an header
-            </span>
-          </template>
-        </UCheckbox>
-        <div v-if="hasHeader" class="relative">
-          <div class="grid sm:grid-cols-2 gap-3">
-            <UFormGroup name="headerName">
-              <UInput
-                v-model="state.headerName"
-                aria-label="Header name"
-                placeholder="Authorization"
-              />
-            </UFormGroup>
-            <UFormGroup name="headerValue">
-              <UInput
-                v-model="state.headerValue"
-                aria-label="Header value"
-                :placeholder="headerValuePlaceholder"
-              />
-            </UFormGroup>
-          </div>
+        <div v-for="item, index in state.headers" :key="index" class="flex gap-3 mb-2">
+          <UFormGroup name="headerName" class="grow">
+            <UInput
+              v-model="item[0]"
+              aria-label="Header name"
+              placeholder="Key"
+            />
+          </UFormGroup>
+          <UFormGroup name="headerValue" class="grow">
+            <UInput
+              v-model="item[1]"
+              aria-label="Header value"
+              placeholder="Value"
+            />
+          </UFormGroup>
+          <UButton
+            icon="i-heroicons-minus"
+            color="white"
+            square
+            variant="solid"
+            aria-label="Remove"
+            @click="state.headers.splice(index, 1)"
+          />
         </div>
-        <UButton :loading="loading" block type="submit" class="mt-4">
+
+        <UButton
+          icon="i-heroicons-plus"
+          color="white"
+          variant="solid"
+          @click="state.headers.push(['', ''])"
+        >
+          Add Header
+        </UButton>
+
+        <UButton :loading="loading" block type="submit" class="mt-5">
           Get my schema
         </UButton>
       </UForm>
 
+      <UAlert
+        v-if="errorSchema"
+        class="mt-12 mb-8"
+        color="primary"
+        variant="solid"
+        title="Error"
+        :description="errorSchema.message"
+      />
       <LazyResult
-        v-if="rawSchema || loading"
+        v-else-if="rawSchema || loading"
         :loading="loading"
         :raw-schema="rawSchema"
       />
