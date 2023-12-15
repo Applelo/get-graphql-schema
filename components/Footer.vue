@@ -1,5 +1,5 @@
 <template>
-  <footer class="mt-auto">
+  <footer class="mt-auto pt-8">
     <UDivider class="mb-2">
       <ULink to="https://github.com/Applelo/get-graphql-schema">
         <span class="sr-only">
