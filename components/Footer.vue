@@ -42,12 +42,6 @@
                 </ULink>
                 by Nuxt Team
               </li>
-              <li>
-                <ULink to="https://github.com/antfu/shikiji" class="text-primary">
-                  Shikiji
-                </ULink>
-                by antfu
-              </li>
             </ul>
           </div>
         </template>

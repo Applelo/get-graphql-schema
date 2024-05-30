@@ -3,8 +3,17 @@ const props = defineProps<{
   rawSchema: string
   loading: boolean
 }>()
+
 const selected = ref(0)
-const rawTs = ref('')
+const {data: rawTs, execute: executeGqlToTs } = await useFetch('/api/gql-to-ts', {
+  method: 'POST',
+  body: {
+    schema: props.rawSchema,
+  },
+  immediate: false,
+  server: false
+})
+
 
 const items = [{
   label: 'Schema',
@@ -14,19 +23,6 @@ const items = [{
 
 const toast = useToast()
 const { copy, isSupported: copySupport } = useClipboard()
-
-const shikiji = await import('shikiji/core')
-const shikijiWasm = await import('shikiji/wasm')
-const shiki = await shikiji.getHighlighterCore({
-  themes: [
-    import('shikiji/themes/dracula.mjs'),
-  ],
-  langs: [
-    import('shikiji/langs/typescript.mjs'),
-    import('shikiji/langs/graphql.mjs'),
-  ],
-  loadWasm: shikijiWasm.getWasmInlined,
-})
 
 function codeToClipboard() {
   if (selected.value === 0) {
@@ -45,39 +41,10 @@ function codeToClipboard() {
   }
 }
 
-const htmlSchema = computed(
-  () => shiki.codeToHtml(
-    props.rawSchema,
-    {
-      lang: 'graphql',
-      theme: 'dracula',
-    },
-  ),
-)
-
-const tsSchema = computed(
-  () => shiki.codeToHtml(
-    rawTs.value,
-    {
-      lang: 'typescript',
-      theme: 'dracula',
-    },
-  ),
-)
-
 watch(selected, async () => {
   if (selected.value !== 1 || rawTs.value)
     return
-
-  const res = await $fetch<string>('/api/gql-to-ts', {
-    method: 'POST',
-    body: {
-      schema: props.rawSchema,
-    },
-  })
-
-  if (res)
-    rawTs.value = res
+  await executeGqlToTs()
 })
 </script>
 
@@ -97,15 +64,17 @@ watch(selected, async () => {
         </UTooltip>
       </div>
     </template>
-    <div
-      v-if="rawSchema && selected === 0"
-      class="max-h-screen overflow-auto"
-      v-html="htmlSchema"
+    <LazyShiki
+    v-if="rawSchema && selected === 0"
+    lang="graphql"
+    class="max-h-screen overflow-auto"
+    :code="rawSchema"
     />
-    <div
-      v-else-if="tsSchema && selected === 1"
+    <LazyShiki
+      v-else-if="rawTs && selected === 1"
       class="max-h-screen overflow-auto"
-      v-html="tsSchema"
+      lang="ts"
+      :code="rawTs"
     />
     <div
       v-else

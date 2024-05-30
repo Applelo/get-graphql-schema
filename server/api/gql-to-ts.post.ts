@@ -1,14 +1,14 @@
+import { parse } from 'graphql'
+import { codegen } from '@graphql-codegen/core'
+import * as typescriptPlugin from '@graphql-codegen/typescript'
+import * as typescriptOperation from '@graphql-codegen/typescript-operations'
+
 export default defineEventHandler(async (event) => {
   const { schema } = await readBody(event)
 
-  const { codegen } = await import('@graphql-codegen/core')
-  const { parse } = await import('graphql')
-
-  const graphqlTypescript = await import('@graphql-codegen/typescript')
-  const graphqlTypescriptOperations = await import('@graphql-codegen/typescript-operations')
   const plugins = [
-    graphqlTypescript,
-    graphqlTypescriptOperations,
+    typescriptPlugin,
+    typescriptOperation,
   ]
   const pluginMap: Record<number, any> = {}
 

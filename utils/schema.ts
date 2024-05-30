@@ -32,30 +32,3 @@ export async function getSchema(opts: SchemaOptions) {
   const { printSchema } = await import('graphql/utilities/printSchema')
   return printSchema(schema)
 }
-
-export async function transformSchemaToTypescript(schema: string) {
-  const { codegen } = await import('@graphql-codegen/core')
-  const { parse } = await import('graphql')
-  const graphqlTypescript = await import('@graphql-codegen/typescript')
-  const graphqlTypescriptOperations = await import('@graphql-codegen/typescript-operations')
-
-  const pluginMap: Record<number, any> = {}
-  const plugins = [
-    graphqlTypescript.default,
-    graphqlTypescriptOperations.default,
-  ]
-
-  plugins.forEach((plugin, i) => {
-    pluginMap[i + 1] = plugin
-  })
-
-  const result = await codegen({
-    filename: 'a.dts',
-    schema: parse(schema),
-    // @ts-expect-error Woo
-    plugins,
-    pluginMap,
-  })
-
-  return result
-}
