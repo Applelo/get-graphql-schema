@@ -3,9 +3,18 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@vueuse/nuxt',
     'nuxt-simple-robots',
+    'nuxt-shiki',
   ],
+  shiki: {
+    defaultTheme: 'dracula',
+    bundledThemes: ['dracula'],
+    bundledLangs: ['typescript', 'graphql'],
+  },
   nitro: {
-    preset: 'vercel-edge',
+    preset: 'vercel',
+    experimental: {
+      wasm: true,
+    },
   },
   ui: {
     icons: [
@@ -15,8 +24,5 @@ export default defineNuxtConfig({
   },
   colorMode: {
     preference: 'dark',
-  },
-  experimental: {
-    componentIslands: true,
   },
 })
