@@ -4,16 +4,19 @@ const props = defineProps<{
   loading: boolean
 }>()
 
-const selected = ref(0)
-const {data: rawTs, execute: executeGqlToTs } = await useFetch('/api/gql-to-ts', {
-  method: 'POST',
-  body: {
+const body = computed(() => {
+  return {
     schema: props.rawSchema,
-  },
-  immediate: false,
-  server: false
+  }
 })
-
+const selected = ref(0)
+const { data: rawTs, execute: executeGqlToTs } = await useFetch('/api/gql-to-ts', {
+  method: 'POST',
+  body,
+  immediate: false,
+  server: false,
+  watch: false,
+})
 
 const items = [{
   label: 'Schema',
@@ -29,14 +32,14 @@ function codeToClipboard() {
     copy(props.rawSchema)
     toast.add({
       title: 'Copied',
-      description: 'The schema is in your clipboard!'
+      description: 'The schema is in your clipboard!',
     })
   }
   else if (selected.value === 1 && rawTs.value) {
     copy(rawTs.value)
     toast.add({
       title: 'Copied',
-      description: 'The TypeScript code is in your clipboard!'
+      description: 'The TypeScript code is in your clipboard!',
     })
   }
 }
@@ -65,10 +68,10 @@ watch(selected, async () => {
       </div>
     </template>
     <LazyShiki
-    v-if="rawSchema && selected === 0"
-    lang="graphql"
-    class="max-h-screen overflow-auto"
-    :code="rawSchema"
+      v-if="rawSchema && selected === 0"
+      lang="graphql"
+      class="max-h-screen overflow-auto"
+      :code="rawSchema"
     />
     <LazyShiki
       v-else-if="rawTs && selected === 1"
