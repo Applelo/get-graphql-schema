@@ -1,7 +1,17 @@
 import type { Config } from 'tailwindcss'
+import colors from 'tailwindcss/colors'
 
 export default <Partial<Config>>{
   theme: {
+    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      black: colors.black,
+      white: colors.white,
+      gray: colors.gray,
+      red: colors.red,
+      green: colors.green,
+    },
     extend: {
       colors: {
         cerise: {
@@ -17,7 +27,6 @@ export default <Partial<Config>>{
           900: '#851653',
           950: '#52052f',
         },
-
       },
     },
   },
